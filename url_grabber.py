@@ -8,6 +8,8 @@ import PySimpleGUI as sg
 import inspect
 import re
 from abstract_utilities.class_utils import *
+def get_ciphers():
+    return "ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,AES256-SHA,AES128-SHA".split(',')
 
 def get_gui_fun(name: str = '', args: dict = {}):
     import PySimpleGUI
@@ -30,18 +32,21 @@ def get_parser_choices():
     return choices
 
 def add_string_list(ls: (list or str), delim: str = '', string: str = ''):
-    if isinstance(ls, str):
-        return string + ls
-    for k in range(0, len(list(ls))):
-        string = string + str(list(ls)[k]) + delim
+    input(ls)
+    if isinstance(ls,str):
+        ls = list(ls.split(','))
+    if isinstance(ls,list):
+        string = ''
+        for part in ls:
+            string = string+delim+part
     return string
+    
 
-def get_ciphers():
-    return "ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,AES256-SHA,AES128-SHA".split(',')
 
 def create_ciphers_string(ls: list = get_ciphers()):
+    
     cipher_string = add_string_list(ls=ls, delim=':')[:-1]
-    print(cipher_string)
+
     globals()['CIPHERS'] = cipher_string
     return cipher_string
 
@@ -362,4 +367,15 @@ def url_grabber_component():
         while_source_top(window, event, values)
         while_grab_url(window, event, values)
         while_action(window, event, values)
+def get_parsed_html(url: str = 'https://www.example.com', header: str = create_user_agent()):
+    s = requests.Session()
+    s.cookies["cf_clearance"] = "cb4c883efc59d0e990caf7508902591f4569e7bf-1617321078-0-150"
+    s.headers.update({"user-agent": get_user_agents()[0]})
+    adapter = TLSAdapter(ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1)
+    s.mount('https://', adapter)
+    r = try_request(url=url, session=s)
+    data = r.text
+    if r is False:
+        return None
+    return data
 url_grabber_component()
