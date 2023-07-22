@@ -2,7 +2,8 @@
 
 This script is a simple tool for grabbing and parsing HTML content from a given URL. It utilizes the `requests` library for making HTTP requests, `BeautifulSoup` for parsing HTML, and `PySimpleGUI` for creating a graphical user interface.
 
-![image](https://github.com/AbstractEndeavors/URL_GRABBER/assets/57512254/833e4413-7f71-4a19-9716-a4609f279784)
+![Screenshot 2023-07-22 125219](https://github.com/AbstractEndeavors/URL_GRABBER/assets/57512254/b5867842-9c3a-4116-8a76-efa82b0a75e3)
+
 
 
 ## Features
